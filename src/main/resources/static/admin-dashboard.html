@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - Classroom CMS</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        /* =========================
+           NAVBAR
+           ========================= */
+
+        .navbar {
+            height: 65px;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .navbar h2 {
+            font-size: 22px;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-name {
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            border: none;
+            background: white;
+            color: #667eea;
+            padding: 9px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #f0f0f0;
+        }
+
+        /* =========================
+           MAIN CONTAINER
+           ========================= */
+
+        .container {
+            width: 95%;
+            max-width: 1300px;
+            margin: 30px auto;
+        }
+
+        /* =========================
+           WELCOME
+           ========================= */
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .welcome h1 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .welcome p {
+            color: #777;
+        }
+
+        /* =========================
+           STAT CARDS
+           ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* =========================
+           TABS
+           ========================= */
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 7px;
+            background: #ddd;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* =========================
+           SECTION
+           ========================= */
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            color: #333;
+        }
+
+        .primary-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary-btn:hover {
+            background: #5568d9;
+        }
+
+        /* =========================
+           FORM
+           ========================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .cancel-btn {
+            background: #777;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        /* =========================
+           TABLE
+           ========================= */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f1f3f8;
+            text-align: left;
+            padding: 13px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 11px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .edit-btn {
+            background: #e7edff;
+            color: #465ac5;
+        }
+
+        .delete-btn {
+            background: #ffe5e5;
+            color: #d8000c;
+        }
+
+        /* =========================
+           STATUS
+           ========================= */
+
+        .status-active {
+            color: #16852a;
+            font-weight: bold;
+        }
+
+        .status-disabled {
+            color: #d8000c;
+            font-weight: bold;
+        }
+
+        /* =========================
+           MESSAGE
+           ========================= */
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .success {
+            display: block;
+            background: #e5ffe9;
+            color: #16852a;
+        }
+
+        .error {
+            display: block;
+            background: #ffe5e5;
+            color: #d8000c;
+        }
+
+        /* =========================
+           MODAL
+           ========================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 550px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            font-size: 25px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        /* =========================
+           EMPTY MESSAGE
+           ========================= */
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 800px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .navbar h2 {
+                font-size: 18px;
+            }
+
+            .admin-name {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+     ========================= -->
+
+<div class="navbar">
+
+    <h2>Classroom CMS</h2>
+
+    <div class="navbar-right">
+
+        <span
+                class="admin-name"
+                id="adminName">
+            Admin
+        </span>
+
+        <button
+                class="logout-btn"
+                onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MAIN CONTAINER
+     ========================= -->
+
+<div class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h1>Admin Dashboard</h1>
+
+        <p>
+            Manage teachers, classrooms and users
+            from one place.
+        </p>
+
+    </div>
+
+
+    <!-- MESSAGE -->
+
+    <div
+            id="message"
+            class="message">
+    </div>
+
+
+    <!-- =========================
+         STATISTICS
+         ========================= -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <h3>Total Teachers</h3>
+
+            <div
+                    class="number"
+                    id="teacherCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>Total Classrooms</h3>
+
+            <div
+                    class="number"
+                    id="classroomCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>System Status</h3>
+
+            <div
+                    class="number"
+                    style="font-size:20px;">
+                Active
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         TABS
+         ========================= -->
+
+    <div class="tabs">
+
+        <button
+                class="tab-btn active"
+                onclick="showTab('teachers', this)">
+            Teachers
+        </button>
+
+        <button
+                class="tab-btn"
+                onclick="showTab('classrooms', this)">
+            Classrooms
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         TEACHERS TAB
+         ========================= -->
+
+    <div
+            id="teachers"
+            class="tab-content active">
+
+
+        <div class="section">
+
+            <div class="section-header">
+
+                <h2>Teachers</h2>
+
+                <button
+                        class="primary-btn"
+                        onclick="openAddTeacher()">
+                    + Add Teacher
+                </button>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Name</th>
+
+                        <th>Username</th>
+
+                        <th>Email</th>
+
+                        <th>Specialization</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="teacherTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CLASSROOMS TAB
+         ========================= -->
+
+    <div
+            id="classrooms"
+            class="tab-content">
+
+
+        <div class="section">
+
+            <div class="section-header">
+
+                <h2>Classrooms</h2>
+
+                <button
+                        class="primary-btn"
+                        onclick="openAddClassroom()">
+                    + Add Classroom
+                </button>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Classroom Name</th>
+
+                        <th>Description</th>
+
+                        <th>Username</th>
+
+                        <th>Email</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="classroomTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     TEACHER MODAL
+     ================================================= -->
+
+<div
+        id="teacherModal"
+        class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="teacherModalTitle">
+                Add Teacher
+            </h2>
+
+            <span
+                    class="close"
+                    onclick="closeTeacherModal()">
+                &times;
+            </span>
+
+        </div>
+
+
+        <form id="teacherForm">
+
+            <input
+                    type="hidden"
+                    id="teacherId">
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <input
+                            type="text"
+                            id="teacherUsername"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                            type="text"
+                            id="teacherPassword"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Name
+                    </label>
+
+                    <input
+                            type="text"
+                            id="teacherName"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                            type="email"
+                            id="teacherEmail">
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Specialization
+                    </label>
+
+                    <input
+                            type="text"
+                            id="teacherSpecialization"
+                            placeholder="Example: Java">
+
+                </div>
+
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                        type="submit"
+                        class="primary-btn">
+                    Save Teacher
+                </button>
+
+                <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeTeacherModal()">
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     CLASSROOM MODAL
+     ================================================= -->
+
+<div
+        id="classroomModal"
+        class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="classroomModalTitle">
+                Add Classroom
+            </h2>
+
+            <span
+                    class="close"
+                    onclick="closeClassroomModal()">
+                &times;
+            </span>
+
+        </div>
+
+
+        <form id="classroomForm">
+
+            <input
+                    type="hidden"
+                    id="classroomId">
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <input
+                            type="text"
+                            id="classroomUsername"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                            type="text"
+                            id="classroomPassword"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        User Name
+                    </label>
+
+                    <input
+                            type="text"
+                            id="classroomUserName"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                            type="email"
+                            id="classroomEmail">
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Classroom Name
+                    </label>
+
+                    <input
+                            type="text"
+                            id="classroomName"
+                            required>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                            id="classroomDescription"
+                            placeholder="Enter classroom description">
+                    </textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                        type="submit"
+                        class="primary-btn">
+                    Save Classroom
+                </button>
+
+                <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeClassroomModal()">
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =================================================
+    // GLOBAL DATA
+    // =================================================
+
+    let teachers = [];
+
+    let classrooms = [];
+
+
+    // =================================================
+    // PAGE LOAD
+    // =================================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            checkAdminLogin();
+
+        }
+    );
+
+
+    // =================================================
+    // CHECK ADMIN LOGIN
+    // =================================================
+
+    async function checkAdminLogin() {
+
+        try {
+
+            const response =
+                await fetch("/api/auth/current");
+
+
+            if (!response.ok) {
+
+                window.location.href =
+                    "/login.html";
+
+                return;
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (data.role !== "ADMIN") {
+
+                alert(
+                    "Admin access required."
+                );
+
+                window.location.href =
+                    "/login.html";
+
+                return;
+            }
+
+
+            document.getElementById(
+                "adminName"
+            ).innerText =
+                data.username;
+
+
+            loadTeachers();
+
+            loadClassrooms();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            window.location.href =
+                "/login.html";
+
+        }
+
+    }
+
+
+    // =================================================
+    // LOAD TEACHERS
+    // =================================================
+
+    async function loadTeachers() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/admin/teachers"
+                );
+
+
+            if (!response.ok) {
+
+                showMessage(
+                    "Unable to load teachers.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            teachers =
+                await response.json();
+
+
+            displayTeachers();
+
+
+            document.getElementById(
+                "teacherCount"
+            ).innerText =
+                teachers.length;
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Error loading teachers.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =================================================
+    // DISPLAY TEACHERS
+    // =================================================
+
+    function displayTeachers() {
+
+        const tbody =
+            document.getElementById(
+                "teacherTableBody"
+            );
+
+
+        tbody.innerHTML = "";
+
+
+        if (teachers.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7"
+                        class="empty">
+                        No teachers found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        teachers.forEach(function(teacher) {
+
+            const user =
+                teacher.user;
+
+
+            const status =
+                user.enabled
+                    ? `<span class="status-active">
+                         Active
+                       </span>`
+                    : `<span class="status-disabled">
+                         Disabled
+                       </span>`;
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>${teacher.id}</td>
+
+                <td>
+                    ${user.name || "-"}
+                </td>
+
+                <td>
+                    ${user.username}
+                </td>
+
+                <td>
+                    ${user.email || "-"}
+                </td>
+
+                <td>
+                    ${teacher.specialization || "-"}
+                </td>
+
+                <td>
+                    ${status}
+                </td>
+
+                <td>
+
+                    <button
+                        class="action-btn edit-btn"
+                        onclick="editTeacher(${teacher.id})">
+                        Edit
+                    </button>
+
+                    ${
+                        user.enabled
+                        ?
+                        `<button
+                            class="action-btn delete-btn"
+                            onclick="disableTeacher(${teacher.id})">
+                            Disable
+                         </button>`
+                        :
+                        ""
+                    }
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        });
+
+    }
+
+
+    // =================================================
+    // OPEN ADD TEACHER
+    // =================================================
+
+    function openAddTeacher() {
+
+        document.getElementById(
+            "teacherModalTitle"
+        ).innerText =
+            "Add Teacher";
+
+
+        document.getElementById(
+            "teacherForm"
+        ).reset();
+
+
+        document.getElementById(
+            "teacherId"
+        ).value = "";
+
+
+        document.getElementById(
+            "teacherModal"
+        ).classList.add("show");
+
+    }
+
+
+    // =================================================
+    // EDIT TEACHER
+    // =================================================
+
+    function editTeacher(id) {
+
+        const teacher =
+            teachers.find(
+                t => t.id === id
+            );
+
+
+        if (!teacher) {
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "teacherModalTitle"
+        ).innerText =
+            "Edit Teacher";
+
+
+        document.getElementById(
+            "teacherId"
+        ).value =
+            teacher.id;
+
+
+        document.getElementById(
+            "teacherUsername"
+        ).value =
+            teacher.user.username || "";
+
+
+        document.getElementById(
+            "teacherPassword"
+        ).value =
+            teacher.user.password || "";
+
+
+        document.getElementById(
+            "teacherName"
+        ).value =
+            teacher.user.name || "";
+
+
+        document.getElementById(
+            "teacherEmail"
+        ).value =
+            teacher.user.email || "";
+
+
+        document.getElementById(
+            "teacherSpecialization"
+        ).value =
+            teacher.specialization || "";
+
+
+        document.getElementById(
+            "teacherModal"
+        ).classList.add("show");
+
+    }
+
+
+    // =================================================
+    // SAVE TEACHER
+    // =================================================
+
+    document.getElementById(
+        "teacherForm"
+    ).addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const id =
+                document.getElementById(
+                    "teacherId"
+                ).value;
+
+
+            const requestData = {
+
+                username:
+                    document.getElementById(
+                        "teacherUsername"
+                    ).value,
+
+                password:
+                    document.getElementById(
+                        "teacherPassword"
+                    ).value,
+
+                name:
+                    document.getElementById(
+                        "teacherName"
+                    ).value,
+
+                email:
+                    document.getElementById(
+                        "teacherEmail"
+                    ).value,
+
+                specialization:
+                    document.getElementById(
+                        "teacherSpecialization"
+                    ).value
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (id) {
+
+                    response =
+                        await fetch(
+                            "/api/admin/teachers/" + id,
+                            {
+
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        requestData
+                                    )
+
+                            }
+                        );
+
+                }
+
+                else {
+
+                    response =
+                        await fetch(
+                            "/api/admin/teachers",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        requestData
+                                    )
+
+                            }
+                        );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    showMessage(
+                        data.message ||
+                        "Unable to save teacher.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                closeTeacherModal();
+
+
+                showMessage(
+                    id
+                        ? "Teacher updated successfully."
+                        : "Teacher added successfully.",
+                    "success"
+                );
+
+
+                loadTeachers();
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Error saving teacher.",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+    // =================================================
+    // DISABLE TEACHER
+    // =================================================
+
+    async function disableTeacher(id) {
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to disable this teacher?"
+            );
+
+
+        if (!confirmDelete) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/admin/teachers/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                showMessage(
+                    data.message ||
+                    "Unable to disable teacher.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            showMessage(
+                "Teacher disabled successfully.",
+                "success"
+            );
+
+
+            loadTeachers();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Error disabling teacher.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =================================================
+    // CLOSE TEACHER MODAL
+    // =================================================
+
+    function closeTeacherModal() {
+
+        document.getElementById(
+            "teacherModal"
+        ).classList.remove("show");
+
+    }
+
+
+    // =================================================
+    // LOAD CLASSROOMS
+    // =================================================
+
+    async function loadClassrooms() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/admin/classrooms"
+                );
+
+
+            if (!response.ok) {
+
+                showMessage(
+                    "Unable to load classrooms.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            classrooms =
+                await response.json();
+
+
+            displayClassrooms();
+
+
+            document.getElementById(
+                "classroomCount"
+            ).innerText =
+                classrooms.length;
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Error loading classrooms.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =================================================
+    // DISPLAY CLASSROOMS
+    // =================================================
+
+    function displayClassrooms() {
+
+        const tbody =
+            document.getElementById(
+                "classroomTableBody"
+            );
+
+
+        tbody.innerHTML = "";
+
+
+        if (classrooms.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7"
+                        class="empty">
+                        No classrooms found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        classrooms.forEach(function(classroom) {
+
+            const user =
+                classroom.user;
+
+
+            const status =
+                classroom.enabled &&
+                user.enabled
+
+                    ? `<span class="status-active">
+                         Active
+                       </span>`
+
+                    : `<span class="status-disabled">
+                         Disabled
+                       </span>`;
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${classroom.id}
+                </td>
+
+                <td>
+                    ${classroom.name}
+                </td>
+
+                <td>
+                    ${classroom.description || "-"}
+                </td>
+
+                <td>
+                    ${user.username}
+                </td>
+
+                <td>
+                    ${user.email || "-"}
+                </td>
+
+                <td>
+                    ${status}
+                </td>
+
+                <td>
+
+                    <button
+                        class="action-btn edit-btn"
+                        onclick="editClassroom(${classroom.id})">
+                        Edit
+                    </button>
+
+                    ${
+                        classroom.enabled &&
+                        user.enabled
+
+                        ?
+
+                        `<button
+                            class="action-btn delete-btn"
+                            onclick="disableClassroom(${classroom.id})">
+                            Disable
+                         </button>`
+
+                        :
+
+                        ""
+                    }
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        });
+
+    }
+
+
+    // =================================================
+    // OPEN ADD CLASSROOM
+    // =================================================
+
+    function openAddClassroom() {
+
+        document.getElementById(
+            "classroomModalTitle"
+        ).innerText =
+            "Add Classroom";
+
+
+        document.getElementById(
+            "classroomForm"
+        ).reset();
+
+
+        document.getElementById(
+            "classroomId"
+        ).value = "";
+
+
+        document.getElementById(
+            "classroomModal"
+        ).classList.add("show");
+
+    }
+
+
+    // =================================================
+    // EDIT CLASSROOM
+    // =================================================
+
+    function editClassroom(id) {
+
+        const classroom =
+            classrooms.find(
+                c => c.id === id
+            );
+
+
+        if (!classroom) {
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "classroomModalTitle"
+        ).innerText =
+            "Edit Classroom";
+
+
+        document.getElementById(
+            "classroomId"
+        ).value =
+            classroom.id;
+
+
+        document.getElementById(
+            "classroomUsername"
+        ).value =
+            classroom.user.username || "";
+
+
+        document.getElementById(
+            "classroomPassword"
+        ).value =
+            classroom.user.password || "";
+
+
+        document.getElementById(
+            "classroomUserName"
+        ).value =
+            classroom.user.name || "";
+
+
+        document.getElementById(
+            "classroomEmail"
+        ).value =
+            classroom.user.email || "";
+
+
+        document.getElementById(
+            "classroomName"
+        ).value =
+            classroom.name || "";
+
+
+        document.getElementById(
+            "classroomDescription"
+        ).value =
+            classroom.description || "";
+
+
+        document.getElementById(
+            "classroomModal"
+        ).classList.add("show");
+
+    }
+
+
+    // =================================================
+    // SAVE CLASSROOM
+    // =================================================
+
+    document.getElementById(
+        "classroomForm"
+    ).addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const id =
+                document.getElementById(
+                    "classroomId"
+                ).value;
+
+
+            const requestData = {
+
+                username:
+                    document.getElementById(
+                        "classroomUsername"
+                    ).value,
+
+                password:
+                    document.getElementById(
+                        "classroomPassword"
+                    ).value,
+
+                name:
+                    document.getElementById(
+                        "classroomUserName"
+                    ).value,
+
+                email:
+                    document.getElementById(
+                        "classroomEmail"
+                    ).value,
+
+                classroomName:
+                    document.getElementById(
+                        "classroomName"
+                    ).value,
+
+                description:
+                    document.getElementById(
+                        "classroomDescription"
+                    ).value
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (id) {
+
+                    response =
+                        await fetch(
+                            "/api/admin/classrooms/" + id,
+                            {
+
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        requestData
+                                    )
+
+                            }
+                        );
+
+                }
+
+                else {
+
+                    response =
+                        await fetch(
+                            "/api/admin/classrooms",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        requestData
+                                    )
+
+                            }
+                        );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    showMessage(
+                        data.message ||
+                        "Unable to save classroom.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                closeClassroomModal();
+
+
+                showMessage(
+                    id
+                        ? "Classroom updated successfully."
+                        : "Classroom added successfully.",
+                    "success"
+                );
+
+
+                loadClassrooms();
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Error saving classroom.",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+    // =================================================
+    // DISABLE CLASSROOM
+    // =================================================
+
+    async function disableClassroom(id) {
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to disable this classroom?"
+            );
+
+
+        if (!confirmDelete) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/admin/classrooms/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                showMessage(
+                    data.message ||
+                    "Unable to disable classroom.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            showMessage(
+                "Classroom disabled successfully.",
+                "success"
+            );
+
+
+            loadClassrooms();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Error disabling classroom.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    // =================================================
+    // CLOSE CLASSROOM MODAL
+    // =================================================
+
+    function closeClassroomModal() {
+
+        document.getElementById(
+            "classroomModal"
+        ).classList.remove("show");
+
+    }
+
+
+    // =================================================
+    // TAB SWITCHING
+    // =================================================
+
+    function showTab(tabName, button) {
+
+        document
+            .querySelectorAll(".tab-content")
+            .forEach(function(tab) {
+
+                tab.classList.remove("active");
+
+            });
+
+
+        document
+            .querySelectorAll(".tab-btn")
+            .forEach(function(btn) {
+
+                btn.classList.remove("active");
+
+            });
+
+
+        document
+            .getElementById(tabName)
+            .classList.add("active");
+
+
+        button.classList.add("active");
+
+    }
+
+
+    // =================================================
+    // LOGOUT
+    // =================================================
+
+    async function logout() {
+
+        try {
+
+            await fetch(
+                "/api/auth/logout",
+                {
+                    method: "POST"
+                }
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+
+        window.location.href =
+            "/login.html";
+
+    }
+
+
+    // =================================================
+    // SHOW MESSAGE
+    // =================================================
+
+    function showMessage(text, type) {
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        message.innerText =
+            text;
+
+
+        message.className =
+            "message " + type;
+
+
+        setTimeout(function() {
+
+            message.className =
+                "message";
+
+            message.innerText =
+                "";
+
+        }, 4000);
+
+    }
+
+
+    // =================================================
+    // CLOSE MODALS WHEN CLICKING OUTSIDE
+    // =================================================
+
+    window.onclick =
+        function(event) {
+
+            const teacherModal =
+                document.getElementById(
+                    "teacherModal"
+                );
+
+            const classroomModal =
+                document.getElementById(
+                    "classroomModal"
+                );
+
+
+            if (event.target === teacherModal) {
+
+                closeTeacherModal();
+
+            }
+
+
+            if (event.target === classroomModal) {
+
+                closeClassroomModal();
+
+            }
+
+        };
+
+</script>
+
+</body>
+
+</html>

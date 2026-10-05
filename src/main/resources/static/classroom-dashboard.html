@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Classroom Dashboard - Classroom CMS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #222;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            background: #1f2937;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .classroom-name-header {
+            font-size: 15px;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            width: 94%;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        /* ================= CARD ================= */
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h2 {
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        /* ================= PROFILE ================= */
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .profile-box {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .profile-box span {
+            display: block;
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .profile-box strong {
+            font-size: 16px;
+        }
+
+        /* ================= CONTENT HEADER ================= */
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .content-count {
+            background: #e8edff;
+            color: #4057c2;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* ================= CONTENT GRID ================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .content-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            transition: 0.2s;
+        }
+
+        .content-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+        }
+
+        .content-icon {
+            height: 150px;
+            background: #eef2ff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 55px;
+        }
+
+        .content-info {
+            padding: 18px;
+        }
+
+        .content-info h3 {
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .content-description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 42px;
+        }
+
+        .content-file {
+            margin-top: 12px;
+            color: #4b5563;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .content-date {
+            margin-top: 7px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .view-btn {
+            width: 100%;
+            margin-top: 15px;
+
+            background: #4f67d8;
+            color: white;
+
+            border: none;
+            padding: 11px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .view-btn:hover {
+            background: #4057c2;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: #777;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .empty h3 {
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        /* ================= MODAL ================= */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+
+            z-index: 1000;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.65);
+
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+
+            width: 90%;
+            max-width: 900px;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+
+            right: 22px;
+            top: 15px;
+
+            font-size: 30px;
+
+            color: #777;
+
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #111;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 10px;
+            padding-right: 40px;
+        }
+
+        .modal-description {
+            color: #6b7280;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* ================= VIDEO ================= */
+
+        .video-container {
+            width: 100%;
+            background: black;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        video {
+            width: 100%;
+            max-height: 500px;
+            display: block;
+        }
+
+        /* ================= FILE PREVIEW ================= */
+
+        .file-preview {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .file-preview-icon {
+            font-size: 65px;
+            margin-bottom: 15px;
+        }
+
+        .open-file-btn {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            background: #4f67d8;
+            color: white;
+
+            text-decoration: none;
+
+            padding: 11px 22px;
+
+            border-radius: 6px;
+
+            font-weight: bold;
+        }
+
+        .open-file-btn:hover {
+            background: #4057c2;
+        }
+
+        /* ================= MESSAGE ================= */
+
+        #message {
+            position: fixed;
+
+            top: 80px;
+            right: 25px;
+
+            min-width: 280px;
+
+            padding: 15px 20px;
+
+            border-radius: 7px;
+
+            color: white;
+
+            display: none;
+
+            z-index: 2000;
+
+            font-weight: bold;
+        }
+
+        .success {
+            background: #16a34a;
+        }
+
+        .error {
+            background: #dc2626;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .profile-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .container {
+                width: 95%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    <h1>
+        Classroom Dashboard
+    </h1>
+
+    <div class="header-right">
+
+        <span
+            class="classroom-name-header"
+            id="headerClassroomName">
+
+            Classroom
+
+        </span>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- =================================================
+         CLASSROOM PROFILE
+    ================================================== -->
+
+    <div class="card">
+
+        <h2>
+            Classroom Profile
+        </h2>
+
+        <div class="profile-grid">
+
+
+            <div class="profile-box">
+
+                <span>
+                    Classroom Name
+                </span>
+
+                <strong id="classroomName">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="profile-box">
+
+                <span>
+                    Username
+                </span>
+
+                <strong id="classroomUsername">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="profile-box">
+
+                <span>
+                    Description
+                </span>
+
+                <strong id="classroomDescription">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="profile-box">
+
+                <span>
+                    Status
+                </span>
+
+                <strong id="classroomStatus">
+                    Loading...
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ALLOWED CONTENT
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="section-header">
+
+            <h2>
+                My Learning Content
+            </h2>
+
+            <span
+                class="content-count"
+                id="contentCount">
+
+                0 Content
+
+            </span>
+
+        </div>
+
+
+        <div
+            class="content-grid"
+            id="contentGrid">
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📚
+                </div>
+
+                <h3>
+                    Loading content...
+                </h3>
+
+                <p>
+                    Please wait.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CONTENT VIEW MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="contentModal">
+
+    <div class="modal-content">
+
+        <span
+            class="close"
+            onclick="closeContentModal()">
+
+            &times;
+
+        </span>
+
+
+        <h2 id="modalTitle">
+            Content
+        </h2>
+
+
+        <p
+            class="modal-description"
+            id="modalDescription">
+
+        </p>
+
+
+        <div id="modalBody">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MESSAGE
+===================================================== -->
+
+<div id="message"></div>
+
+
+<script>
+
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let classroom = null;
+
+let permissions = [];
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        const loggedIn =
+            await checkLogin();
+
+        if (!loggedIn) {
+            return;
+        }
+
+
+        await loadClassroomProfile();
+
+        await loadAllowedContent();
+
+    }
+);
+
+
+/* =====================================================
+   SHOW MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    type
+) {
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    message.textContent =
+        text;
+
+
+    message.className =
+        type;
+
+
+    message.style.display =
+        "block";
+
+
+    setTimeout(
+        function () {
+
+            message.style.display =
+                "none";
+
+        },
+        3500
+    );
+}
+
+
+/* =====================================================
+   CHECK LOGIN
+===================================================== */
+
+async function checkLogin() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/auth/current"
+            );
+
+
+        if (!response.ok) {
+
+            window.location.href =
+                "/login.html";
+
+            return false;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !data.role ||
+            data.role.toUpperCase() !== "CLASSROOM"
+        ) {
+
+            showMessage(
+                "Classroom login required.",
+                "error"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "/login.html";
+
+                },
+                1500
+            );
+
+
+            return false;
+        }
+
+
+        return true;
+
+    }
+    catch (error) {
+
+        console.error(
+            "Login check error:",
+            error
+        );
+
+
+        window.location.href =
+            "/login.html";
+
+
+        return false;
+    }
+}
+
+
+/* =====================================================
+   LOAD CLASSROOM PROFILE
+===================================================== */
+
+async function loadClassroomProfile() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/classroom/profile"
+            );
+
+
+        if (!response.ok) {
+
+            const text =
+                await response.text();
+
+            console.error(
+                "Profile error:",
+                text
+            );
+
+            showMessage(
+                "Unable to load classroom profile.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        classroom =
+            await response.json();
+
+
+        const user =
+            classroom.user || {};
+
+
+        document.getElementById(
+            "classroomName"
+        ).textContent =
+            classroom.name || "-";
+
+
+        document.getElementById(
+            "headerClassroomName"
+        ).textContent =
+            classroom.name || "Classroom";
+
+
+        document.getElementById(
+            "classroomUsername"
+        ).textContent =
+            user.username || "-";
+
+
+        document.getElementById(
+            "classroomDescription"
+        ).textContent =
+            classroom.description || "-";
+
+
+        document.getElementById(
+            "classroomStatus"
+        ).textContent =
+            classroom.enabled
+                ? "Active"
+                : "Disabled";
+
+    }
+    catch (error) {
+
+        console.error(
+            "Profile loading error:",
+            error
+        );
+
+    }
+}
+
+
+/* =====================================================
+   LOAD ALLOWED CONTENT
+===================================================== */
+
+async function loadAllowedContent() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/classroom/content"
+            );
+
+
+        if (!response.ok) {
+
+            const text =
+                await response.text();
+
+            console.error(
+                "Content API error:",
+                text
+            );
+
+
+            showEmptyContent(
+                "Unable to load your content."
+            );
+
+
+            return;
+        }
+
+
+        permissions =
+            await response.json();
+
+
+        console.log(
+            "Allowed content:",
+            permissions
+        );
+
+
+        renderContent();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Content loading error:",
+            error
+        );
+
+
+        showEmptyContent(
+            "Unable to connect to the server."
+        );
+
+    }
+}
+
+
+/* =====================================================
+   RENDER CONTENT
+===================================================== */
+
+function renderContent() {
+
+    const grid =
+        document.getElementById(
+            "contentGrid"
+        );
+
+
+    const count =
+        document.getElementById(
+            "contentCount"
+        );
+
+
+    if (
+        !permissions ||
+        permissions.length === 0
+    ) {
+
+        count.textContent =
+            "0 Content";
+
+
+        showEmptyContent(
+            "No content has been shared with your classroom yet."
+        );
+
+
+        return;
+    }
+
+
+    count.textContent =
+        permissions.length
+        + (
+            permissions.length === 1
+                ? " Content"
+                : " Contents"
+        );
+
+
+    grid.innerHTML =
+        "";
+
+
+    permissions.forEach(
+        function (permission) {
+
+            /*
+             * Backend returns ContentPermission.
+             *
+             * Content is inside:
+             *
+             * permission.content
+             */
+
+            const content =
+                permission.content;
+
+
+            if (!content) {
+                return;
+            }
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "content-card";
+
+
+            const icon =
+                getContentIcon(
+                    content.contentType
+                );
+
+
+            card.innerHTML = `
+
+                <div class="content-icon">
+
+                    ${icon}
+
+                </div>
+
+
+                <div class="content-info">
+
+                    <h3>
+                        ${escapeHtml(
+                            content.title || "Untitled"
+                        )}
+                    </h3>
+
+
+                    <p class="content-description">
+
+                        ${escapeHtml(
+                            content.description ||
+                            "No description available."
+                        )}
+
+                    </p>
+
+
+                    <div class="content-file">
+
+                        📄
+                        ${escapeHtml(
+                            content.fileName || "File"
+                        )}
+
+                    </div>
+
+
+                    <div class="content-date">
+
+                        Uploaded:
+                        ${formatDate(
+                            content.uploadedAt
+                        )}
+
+                    </div>
+
+
+                    <button
+                        class="view-btn"
+                        onclick="viewContent(
+                            ${content.id}
+                        )">
+
+                        Open Content
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+
+    if (
+        grid.children.length === 0
+    ) {
+
+        showEmptyContent(
+            "No valid content is available."
+        );
+
+    }
+}
+
+
+/* =====================================================
+   EMPTY CONTENT
+===================================================== */
+
+function showEmptyContent(
+    message
+) {
+
+    const grid =
+        document.getElementById(
+            "contentGrid"
+        );
+
+
+    grid.innerHTML = `
+
+        <div class="empty"
+             style="grid-column:1/-1;">
+
+            <div class="empty-icon">
+                📚
+            </div>
+
+            <h3>
+                No Content Available
+            </h3>
+
+            <p>
+                ${escapeHtml(message)}
+            </p>
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   GET CONTENT ICON
+===================================================== */
+
+function getContentIcon(
+    contentType
+) {
+
+    if (!contentType) {
+
+        return "📄";
+
+    }
+
+
+    const type =
+        contentType.toLowerCase();
+
+
+    if (
+        type.startsWith("video/")
+    ) {
+
+        return "🎬";
+
+    }
+
+
+    if (
+        type.includes("pdf")
+    ) {
+
+        return "📕";
+
+    }
+
+
+    if (
+        type.includes("image")
+    ) {
+
+        return "🖼️";
+
+    }
+
+
+    if (
+        type.includes("audio")
+    ) {
+
+        return "🎵";
+
+    }
+
+
+    return "📄";
+}
+
+
+/* =====================================================
+   VIEW CONTENT
+===================================================== */
+
+function viewContent(
+    contentId
+) {
+
+    const permission =
+        permissions.find(
+            function (item) {
+
+                return item.content
+                    && item.content.id == contentId;
+
+            }
+        );
+
+
+    if (!permission) {
+
+        showMessage(
+            "Content not found.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const content =
+        permission.content;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        content.title || "Content";
+
+
+    document.getElementById(
+        "modalDescription"
+    ).textContent =
+        content.description ||
+        "No description available.";
+
+
+    const modalBody =
+        document.getElementById(
+            "modalBody"
+        );
+
+
+    const contentType =
+        (
+            content.contentType ||
+            ""
+        ).toLowerCase();
+
+
+    /*
+     * The backend endpoint used here is:
+     *
+     * /api/content/file/{id}
+     */
+
+    const fileUrl =
+        "/api/content/file/"
+        + content.id;
+
+
+    if (
+        contentType.startsWith("video/")
+    ) {
+
+        modalBody.innerHTML = `
+
+            <div class="video-container">
+
+                <video
+                    controls
+                    autoplay>
+
+                    <source
+                        src="${fileUrl}"
+                        type="${escapeHtml(
+                            content.contentType
+                        )}">
+
+                    Your browser does not
+                    support video playback.
+
+                </video>
+
+            </div>
+
+        `;
+
+    }
+    else if (
+        contentType.startsWith("image/")
+    ) {
+
+        modalBody.innerHTML = `
+
+            <div style="
+                text-align:center;
+                background:#f8fafc;
+                padding:20px;
+                border-radius:8px;
+            ">
+
+                <img
+                    src="${fileUrl}"
+                    alt="Content"
+                    style="
+                        max-width:100%;
+                        max-height:600px;
+                        border-radius:8px;
+                    ">
+
+            </div>
+
+        `;
+
+    }
+    else if (
+        contentType.includes("pdf")
+    ) {
+
+        modalBody.innerHTML = `
+
+            <iframe
+                src="${fileUrl}"
+                style="
+                    width:100%;
+                    height:600px;
+                    border:1px solid #ddd;
+                    border-radius:8px;
+                ">
+
+            </iframe>
+
+            <div style="text-align:center;">
+
+                <a
+                    href="${fileUrl}"
+                    target="_blank"
+                    class="open-file-btn">
+
+                    Open PDF
+
+                </a>
+
+            </div>
+
+        `;
+
+    }
+    else {
+
+        modalBody.innerHTML = `
+
+            <div class="file-preview">
+
+                <div class="file-preview-icon">
+                    📄
+                </div>
+
+                <h3>
+                    ${escapeHtml(
+                        content.fileName || "File"
+                    )}
+                </h3>
+
+                <p style="
+                    margin-top:10px;
+                    color:#777;
+                ">
+
+                    This file cannot be
+                    previewed here.
+
+                </p>
+
+
+                <a
+                    href="${fileUrl}"
+                    target="_blank"
+                    class="open-file-btn">
+
+                    Open / Download File
+
+                </a>
+
+            </div>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "contentModal"
+    ).style.display =
+        "flex";
+}
+
+
+/* =====================================================
+   CLOSE CONTENT MODAL
+===================================================== */
+
+function closeContentModal() {
+
+    const modal =
+        document.getElementById(
+            "contentModal"
+        );
+
+
+    const video =
+        modal.querySelector(
+            "video"
+        );
+
+
+    if (video) {
+
+        video.pause();
+
+        video.currentTime = 0;
+
+    }
+
+
+    modal.style.display =
+        "none";
+
+
+    document.getElementById(
+        "modalBody"
+    ).innerHTML =
+        "";
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+async function logout() {
+
+    try {
+
+        await fetch(
+            "/api/auth/logout",
+            {
+                method: "POST"
+            }
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }
+
+
+    window.location.href =
+        "/login.html";
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(
+    date
+) {
+
+    if (!date) {
+
+        return "-";
+
+    }
+
+
+    try {
+
+        return new Date(
+            date
+        ).toLocaleString();
+
+    }
+    catch (error) {
+
+        return date;
+
+    }
+}
+
+
+/* =====================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function (event) {
+
+        const modal =
+            document.getElementById(
+                "contentModal"
+            );
+
+
+        if (
+            event.target === modal
+        ) {
+
+            closeContentModal();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
